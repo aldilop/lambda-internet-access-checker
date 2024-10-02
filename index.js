@@ -1,9 +1,12 @@
+import http from 'http';
+import https from 'https';
+
 // Thanks to: https://www.tomas-dvorak.cz/posts/nodejs-request-without-dependencies/
 const getContent = function (url) {
   // return new pending promise
   return new Promise((resolve, reject) => {
     // select http or https module, depending on reqested url
-    const lib = url.startsWith('https') ? require('https') : require('http');
+    const lib = url.startsWith('https') ? https : http;
     const request = lib.get(url, (response) => {
       // handle http errors
       if (response.statusCode < 200 || response.statusCode > 299) {
@@ -21,7 +24,7 @@ const getContent = function (url) {
   })
 };
 
-exports.handler = async (event) => {
+export const handler = async (event) => {
   console.log('Received event: %j', event);
 
   const url = event.url || 'https://www.google.com';
